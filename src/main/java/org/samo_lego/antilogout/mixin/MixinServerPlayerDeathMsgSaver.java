@@ -32,7 +32,7 @@ public abstract class MixinServerPlayerDeathMsgSaver {
      * @param damageSource the source of damage
      * @param ci callback info
      */
-    @Inject(method = "onDeath", at = @At("RETURN"))
+    @Inject(method = "onDeath", at = @At("HEAD"))
     private void onDeath(DamageSource damageSource, CallbackInfo ci) {
         if (((LogoutRules) this).al_isFake()) {
             ServerWorld serverLevel = (ServerWorld) this.getWorld();
