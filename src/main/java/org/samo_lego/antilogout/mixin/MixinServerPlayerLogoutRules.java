@@ -48,6 +48,16 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
         return this.afkDisconnect;
     }
 
+    @Override
+    public void al_setDelayedTask(Runnable delayedTask) {
+        this.delayedTask = delayedTask;
+    }
+
+    @Override
+    public Runnable al_getDelayedTask() {
+        return this.delayedTask;
+    }
+
     /**
      * Checks if the player is currently allowed to disconnect.
      * @return true if allowed, false otherwise

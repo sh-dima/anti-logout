@@ -15,6 +15,18 @@ import net.minecraft.util.Formatting;
 
 public interface LogoutRules {
     /**
+     * Gets the delayed task (Runnable) for this player.
+     * @return the delayed task
+     */
+    Runnable al_getDelayedTask();
+
+    /**
+     * Sets the delayed task (Runnable) for this player.
+     * @param delayedTask the delayed task
+     */
+    void al_setDelayedTask(Runnable delayedTask);
+
+    /**
      * Sets whether this disconnect was triggered by the AFK command.
      * @param afk true if disconnect is AFK-triggered, false otherwise
      */

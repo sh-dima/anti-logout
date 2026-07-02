@@ -78,6 +78,7 @@ public class EventHandler {
     /**
      * Marks a player as "in combat state" if the damage source is allowed by config.
      * If the damage source is a projectile shot by a player, the shooter is also marked.
+     * Removes the player from combat if they are dead.
      *
      * @param target       the player who was hurt
      * @param damageSource the damage source
@@ -96,6 +97,15 @@ public class EventHandler {
             }
             if (trigger) {
                 ((LogoutRules) target).al_setInCombatUntil(allowedDc);
+            }
+            if (target.getHealth() == 0 && !(((LogoutRules) target).al_isFake())) {
+                ((LogoutRules) target).al_setAllowDisconnectAt(System.currentTimeMillis());
+
+                Runnable task = ((LogoutRules) target).al_getDelayedTask();
+                if (task != null) {
+                    task.run();
+                    ((LogoutRules) target).al_setDelayedTask(null);
+                }
             }
         }
     }
