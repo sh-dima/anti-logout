@@ -57,6 +57,39 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
 }
 
+tasks.withType(AbstractArchiveTask).configureEach {
+	preserveFileTimestamps = false
+	reproducibleFileOrder = true
+
+	filePermissions {
+		user.read = true
+		user.write = true
+		user.execute = false
+
+		group.read = true
+		group.write = false
+		group.execute = false
+
+		other.read = true
+		other.write = false
+		other.execute = false
+	}
+
+	dirPermissions {
+		user.read = true
+		user.write = true
+		user.execute = true
+
+		group.read = true
+		group.write = false
+		group.execute = true
+
+		other.read = false
+		other.write = false
+		other.execute = true
+	}
+}
+
 java {
 	withSourcesJar()
 	sourceCompatibility = JavaVersion.VERSION_21
