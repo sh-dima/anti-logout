@@ -1,14 +1,14 @@
 plugins {
-	id 'fabric-loom' version "${loom_version}"
-	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
+	alias libs.plugins.fabric.loom
+	alias libs.plugins.shadow
+	alias libs.plugins.publish
 }
 
-version = project.mod_version
-group = project.maven_group
+version = '2.1.0'
+group = 'org.samo_lego'
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = 'antilogout'
 }
 
 repositories {
@@ -33,16 +33,16 @@ configurations {
 }
 
 dependencies {
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	minecraft libs.minecraft
+	mappings "${libs.yarn.get()}:v2"
+	modImplementation libs.fabric.loader
+	modImplementation libs.fabric.api
 
-	modImplementation "me.lucko:fabric-permissions-api:${project['fabric-permissions-api']}"
-	implementation "com.electronwill.night-config:core:${project.night_config_version_core}"
-	implementation "com.electronwill.night-config:toml:${project.night_config_version_toml}"
-	shadowOnly "com.electronwill.night-config:core:${project.night_config_version_core}"
-	shadowOnly "com.electronwill.night-config:toml:${project.night_config_version_toml}"
+	modImplementation libs.fabric.permissions
+	implementation libs.config.core
+	implementation libs.config.toml
+	shadowOnly libs.config.core
+	shadowOnly libs.config.toml
 }
 
 processResources {
@@ -118,7 +118,7 @@ def ENV = System.getenv()
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
+			artifactId = 'antilogout'
 			from components.java
 		}
 	}
