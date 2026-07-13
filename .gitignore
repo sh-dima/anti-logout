@@ -1,6 +1,9 @@
 # gradle
 
 .gradle/
+gradlew
+gradlew.bat
+gradle/wrapper/
 build/
 out/
 classes/
