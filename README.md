@@ -1,8 +1,6 @@
 # AntiLogout
 
-**Originally by samo_lego, maintained/modified by pafer29555.**
-
-*If samo_lego does not want this fork to be public, I (pafer29555) will take it down upon request.*
+**Originally by samo_lego, modified by pafer29555, maintained/modified by sh-dima.**
 
 ---
 
