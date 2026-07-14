@@ -5,9 +5,34 @@
 	"name": "Fair Combat",
 	"description": "No more combat-logouts.",
 	"authors": [
-		"Esoteric Enderman",
-		"pafer29555",
-		"samo_lego"
+		{
+			"name": "Esoteric Enderman",
+			"contact": {
+				"homepage": "https://shdima.gitlab.io/",
+				"email": "dima.o.sh@proton.me"
+			}
+		},
+		{
+			"name": "Nuss",
+			"contact": {
+				"homepage": "https://github.com/nussico"
+			}
+		},
+		{
+			"name": "samo_lego",
+			"contact": {
+				"homepage": "https://samolego.github.io/"
+			}
+		}
+	],
+	"contributors": [
+		{
+			"name": "IMB11",
+			"contact": {
+				"homepage": "https://github.com/IMB11",
+				"email": "contact@cal.engineer"
+			}
+		}
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
