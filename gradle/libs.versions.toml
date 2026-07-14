@@ -1,16 +1,16 @@
 [versions]
 minecraft = "1.21.8"
-fabric-loader = "0.16.14"
-fabric-api = "0.130.0+1.21.8"
+fabric-loader = "0.19.3"
+fabric-api = "0.136.1+1.21.8"
 fabric-permissions = "0.4.1"
 
 yarn = "1.21.8+build.1"
 
-config-core = "3.6.6"
-config-toml = "3.6.6"
+config-core = "3.9.0"
+config-toml = "3.9.0"
 
 
-fabric-loom = "1.11-SNAPSHOT"
+fabric-loom = "1.13.6"
 
 shadow = "8.1.1"
 
