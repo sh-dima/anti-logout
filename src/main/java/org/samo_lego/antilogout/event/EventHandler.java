@@ -29,102 +29,102 @@ import org.samo_lego.antilogout.datatracker.LogoutRules;
  */
 public class EventHandler {
 
-    /**
-     * Marks both the attacker and the target as "in combat state" if they are players.
-     * This is triggered on a player attack event and sets the combat timeout for both parties.
-     *
-     * @param attacker         the player who attacked
-     * @param _level           the world
-     * @param _interactionHand the hand used to attack
-     * @param target           the targeted entity
-     * @param _entityHitResult the hit result
-     * @return {@link ActionResult#PASS} to allow normal event flow
-     */
-    public static ActionResult onAttack(PlayerEntity attacker, World _level, Hand _interactionHand,
-            Entity target, @Nullable EntityHitResult _entityHitResult) {
-        if (target instanceof PlayerEntity) {
-            long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
+	/**
+	 * Marks both the attacker and the target as "in combat state" if they are players.
+	 * This is triggered on a player attack event and sets the combat timeout for both parties.
+	 *
+	 * @param attacker         the player who attacked
+	 * @param _level           the world
+	 * @param _interactionHand the hand used to attack
+	 * @param target           the targeted entity
+	 * @param _entityHitResult the hit result
+	 * @return {@link ActionResult#PASS} to allow normal event flow
+	 */
+	public static ActionResult onAttack(PlayerEntity attacker, World _level, Hand _interactionHand,
+			Entity target, @Nullable EntityHitResult _entityHitResult) {
+		if (target instanceof PlayerEntity) {
+			long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
 
-            // Mark target
-            if (target instanceof LogoutRules logoutTarget
-                    && !Permissions.check(target, "antilogout.bypass.combat", AntiLogout.config.combatLog.bypassPermissionLevel)) {
-                logoutTarget.al_setInCombatUntil(allowedDc);
-            }
+			// Mark target
+			if (target instanceof LogoutRules logoutTarget
+					&& !Permissions.check(target, "antilogout.bypass.combat", AntiLogout.config.combatLog.bypassPermissionLevel)) {
+				logoutTarget.al_setInCombatUntil(allowedDc);
+			}
 
-            // Mark attacker
-            if (attacker instanceof LogoutRules logoutAttacker
-                    && !Permissions.check(attacker, "antilogout.bypass.combat",
-                            AntiLogout.config.combatLog.bypassPermissionLevel)) {
-                logoutAttacker.al_setInCombatUntil(allowedDc);
-            }
-        }
-        return ActionResult.PASS;
-    }
+			// Mark attacker
+			if (attacker instanceof LogoutRules logoutAttacker
+					&& !Permissions.check(attacker, "antilogout.bypass.combat",
+							AntiLogout.config.combatLog.bypassPermissionLevel)) {
+				logoutAttacker.al_setInCombatUntil(allowedDc);
+			}
+		}
+		return ActionResult.PASS;
+	}
 
-    /**
-     * Disconnects a fake (AFK/dummy) player on death.
-     * Ensures that fake players are properly removed from the world when they die.
-     *
-     * @param deadEntity    the entity that died
-     * @param _damageSource the damage source of death
-     */
-    public static void onDeath(LivingEntity deadEntity, DamageSource _damageSource) {
-        if (deadEntity instanceof LogoutRules player && player.al_isFake()) {
-            // Remove player from online players
-            ((ServerPlayerEntity) player).networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
-        }
-    }
+	/**
+	 * Disconnects a fake (AFK/dummy) player on death.
+	 * Ensures that fake players are properly removed from the world when they die.
+	 *
+	 * @param deadEntity    the entity that died
+	 * @param _damageSource the damage source of death
+	 */
+	public static void onDeath(LivingEntity deadEntity, DamageSource _damageSource) {
+		if (deadEntity instanceof LogoutRules player && player.al_isFake()) {
+			// Remove player from online players
+			((ServerPlayerEntity) player).networkHandler.onDisconnected(new DisconnectionInfo(Text.empty()));
+		}
+	}
 
-    /**
-     * Marks a player as "in combat state" if the damage source is allowed by config.
-     * If the damage source is a projectile shot by a player, the shooter is also marked.
-     * Removes the player from combat if they are dead.
-     *
-     * @param target       the player who was hurt
-     * @param damageSource the damage source
-     */
-    public static void onHurt(ServerPlayerEntity target, DamageSource damageSource) {
-        long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
-        if (target != null) {
-            boolean trigger;
-            if (AntiLogout.config.combatLog.playerHurtOnly) {
-                // Only player or player projectile
-                trigger = (damageSource.getAttacker() instanceof PlayerEntity) ||
-                        (damageSource.getAttacker() instanceof ProjectileEntity p && p.getOwner() instanceof PlayerEntity);
-            } else {
-                // Any damage triggers
-                trigger = true;
-            }
-            if (trigger) {
-                ((LogoutRules) target).al_setInCombatUntil(allowedDc);
-            }
-            if (target.getHealth() == 0 && !(((LogoutRules) target).al_isFake())) {
-                ((LogoutRules) target).al_setAllowDisconnectAt(System.currentTimeMillis());
+	/**
+	 * Marks a player as "in combat state" if the damage source is allowed by config.
+	 * If the damage source is a projectile shot by a player, the shooter is also marked.
+	 * Removes the player from combat if they are dead.
+	 *
+	 * @param target       the player who was hurt
+	 * @param damageSource the damage source
+	 */
+	public static void onHurt(ServerPlayerEntity target, DamageSource damageSource) {
+		long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
+		if (target != null) {
+			boolean trigger;
+			if (AntiLogout.config.combatLog.playerHurtOnly) {
+				// Only player or player projectile
+				trigger = (damageSource.getAttacker() instanceof PlayerEntity) ||
+						(damageSource.getAttacker() instanceof ProjectileEntity p && p.getOwner() instanceof PlayerEntity);
+			} else {
+				// Any damage triggers
+				trigger = true;
+			}
+			if (trigger) {
+				((LogoutRules) target).al_setInCombatUntil(allowedDc);
+			}
+			if (target.getHealth() == 0 && !(((LogoutRules) target).al_isFake())) {
+				((LogoutRules) target).al_setAllowDisconnectAt(System.currentTimeMillis());
 
-                Runnable task = ((LogoutRules) target).al_getDelayedTask();
-                if (task != null) {
-                    task.run();
-                    ((LogoutRules) target).al_setDelayedTask(null);
-                }
-            }
-        }
-    }
+				Runnable task = ((LogoutRules) target).al_getDelayedTask();
+				if (task != null) {
+					task.run();
+					((LogoutRules) target).al_setDelayedTask(null);
+				}
+			}
+		}
+	}
 
-    /**
-     * Sends a stored death message to a player if they died while disconnected but are still present in the world.
-     * This ensures the player receives their death message upon rejoining.
-     *
-     * @param listener the packet listener for the player
-     * @param _sender  the packet sender
-     * @param _server  the Minecraft server
-     */
-    public static void onPlayerJoin(ServerPlayNetworkHandler listener, PacketSender _sender,
-            MinecraftServer _server) {
-        final Text deathMessage = LogoutRules.SKIPPED_DEATH_MESSAGES.get(listener.player.getUuid());
-        if (deathMessage != null) {
-            listener.player.sendMessage(deathMessage, false);
-            listener.sendPacket(new DeathMessageS2CPacket(listener.player.getId(), deathMessage));
-            LogoutRules.SKIPPED_DEATH_MESSAGES.remove(listener.player.getUuid());
-        }
-    }
+	/**
+	 * Sends a stored death message to a player if they died while disconnected but are still present in the world.
+	 * This ensures the player receives their death message upon rejoining.
+	 *
+	 * @param listener the packet listener for the player
+	 * @param _sender  the packet sender
+	 * @param _server  the Minecraft server
+	 */
+	public static void onPlayerJoin(ServerPlayNetworkHandler listener, PacketSender _sender,
+			MinecraftServer _server) {
+		final Text deathMessage = LogoutRules.SKIPPED_DEATH_MESSAGES.get(listener.player.getUuid());
+		if (deathMessage != null) {
+			listener.player.sendMessage(deathMessage, false);
+			listener.sendPacket(new DeathMessageS2CPacket(listener.player.getId(), deathMessage));
+			LogoutRules.SKIPPED_DEATH_MESSAGES.remove(listener.player.getUuid());
+		}
+	}
 }

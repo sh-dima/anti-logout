@@ -29,7 +29,7 @@ loom {
 }
 
 configurations {
-    shadowOnly
+	shadowOnly
 }
 
 dependencies {
@@ -105,12 +105,12 @@ jar {
 }
 
 shadowJar {
-    configurations = [project.configurations.shadowOnly]
-    relocate 'com.electronwill.nightconfig', 'org.samo_lego.antilogout.shadow.nightconfig'
+	configurations = [project.configurations.shadowOnly]
+	relocate 'com.electronwill.nightconfig', 'org.samo_lego.antilogout.shadow.nightconfig'
 }
 remapJar {
-    dependsOn shadowJar
-    input.set(shadowJar.archiveFile)
+	dependsOn shadowJar
+	input.set(shadowJar.archiveFile)
 }
 
 publishing {

@@ -21,43 +21,43 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayerEntity.class)
 public abstract class MixinServerPlayerDeathMsgSaver extends PlayerEntity {
 
-    @Unique
-    private static final int MAX_DEATH_MESSAGE_LENGTH = 256;
-    @Unique
-    private final ServerPlayerEntity self = (ServerPlayerEntity) (Object) this;
+	@Unique
+	private static final int MAX_DEATH_MESSAGE_LENGTH = 256;
+	@Unique
+	private final ServerPlayerEntity self = (ServerPlayerEntity) (Object) this;
 
-    public MixinServerPlayerDeathMsgSaver(World world, GameProfile profile) {
-        super(world, profile);
-    }
+	public MixinServerPlayerDeathMsgSaver(World world, GameProfile profile) {
+		super(world, profile);
+	}
 
-    /**
-     * Injects into the player death handler to save death messages for fake/disconnected players.
-     * Stores the message in SKIPPED_DEATH_MESSAGES for later display.
-     * @param damageSource the source of damage
-     * @param ci callback info
-     */
-    @Inject(method = "onDeath", at = @At("HEAD"))
-    private void onDeath(DamageSource damageSource, CallbackInfo ci) {
-        if (((LogoutRules) this).al_isFake()) {
-            ServerWorld serverLevel = (ServerWorld) this.getWorld();
-            boolean seeDeathMsgs = serverLevel.getGameRules().getBoolean(GameRules.SHOW_DEATH_MESSAGES);
+	/**
+	 * Injects into the player death handler to save death messages for fake/disconnected players.
+	 * Stores the message in SKIPPED_DEATH_MESSAGES for later display.
+	 * @param damageSource the source of damage
+	 * @param ci callback info
+	 */
+	@Inject(method = "onDeath", at = @At("HEAD"))
+	private void onDeath(DamageSource damageSource, CallbackInfo ci) {
+		if (((LogoutRules) this).al_isFake()) {
+			ServerWorld serverLevel = (ServerWorld) this.getWorld();
+			boolean seeDeathMsgs = serverLevel.getGameRules().getBoolean(GameRules.SHOW_DEATH_MESSAGES);
 
-            Text deathMsg;
-            if (seeDeathMsgs) {
-                deathMsg = self.getDamageTracker().getDeathMessage();
+			Text deathMsg;
+			if (seeDeathMsgs) {
+				deathMsg = self.getDamageTracker().getDeathMessage();
 
-                if (deathMsg.getString().length() > MAX_DEATH_MESSAGE_LENGTH) {
-                    String string = deathMsg.asTruncatedString(MAX_DEATH_MESSAGE_LENGTH);
-                    var attackTooLongMsg = Text.translatable("death.attack.message_too_long",
-                            Text.literal(string).formatted(Formatting.YELLOW));
+				if (deathMsg.getString().length() > MAX_DEATH_MESSAGE_LENGTH) {
+					String string = deathMsg.asTruncatedString(MAX_DEATH_MESSAGE_LENGTH);
+					var attackTooLongMsg = Text.translatable("death.attack.message_too_long",
+							Text.literal(string).formatted(Formatting.YELLOW));
 
-                    deathMsg = Text.translatable("death.attack.even_more_magic", self.getDisplayName())
-                            .styled(style -> style.withHoverEvent(new HoverEvent.ShowText(attackTooLongMsg)));
-                }
-            } else {
-                deathMsg = ScreenTexts.EMPTY;
-            }
-            LogoutRules.SKIPPED_DEATH_MESSAGES.put(self.getUuid(), deathMsg);
-        }
-    }
+					deathMsg = Text.translatable("death.attack.even_more_magic", self.getDisplayName())
+							.styled(style -> style.withHoverEvent(new HoverEvent.ShowText(attackTooLongMsg)));
+				}
+			} else {
+				deathMsg = ScreenTexts.EMPTY;
+			}
+			LogoutRules.SKIPPED_DEATH_MESSAGES.put(self.getUuid(), deathMsg);
+		}
+	}
 }

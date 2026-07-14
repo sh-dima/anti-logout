@@ -17,38 +17,38 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public abstract class MixinServerGamePacketListenerImpl extends ServerCommonNetworkHandler {
-    @Shadow
-    public ServerPlayerEntity player;
+	@Shadow
+	public ServerPlayerEntity player;
 
-    public MixinServerGamePacketListenerImpl(MinecraftServer minecraftServer, ClientConnection clientConnection,
-            ConnectedClientData connectedClientData) {
-        super(minecraftServer, clientConnection, connectedClientData);
-    }
+	public MixinServerGamePacketListenerImpl(MinecraftServer minecraftServer, ClientConnection clientConnection,
+			ConnectedClientData connectedClientData) {
+		super(minecraftServer, clientConnection, connectedClientData);
+	}
 
-    @Shadow
-    public abstract ServerPlayerEntity getPlayer();
+	@Shadow
+	public abstract ServerPlayerEntity getPlayer();
 
-    /**
-     * Injects into the disconnect method to ensure /afk disconnects do not trigger combat log messages or dummies.
-     * Cancels disconnect if AFK, otherwise handles as normal.
-     * @param disconnectionInfo the disconnection info
-     * @param ci callback info
-     */
-    @Inject(method = "onDisconnected", at = @At("HEAD"), cancellable = true)
-    private void al$onDisconnect(DisconnectionInfo disconnectionInfo, CallbackInfo ci) {
-        // Generic disconnect is handled by MConnection#al_handleDisconnection
-        LogoutRules rules = (LogoutRules) this.getPlayer();
-        if (!rules.al_allowDisconnect()
-                && disconnectionInfo.reason() == AntiLogout.AFK_MESSAGE) {
-            // If this is an AFK disconnect, do not trigger combat log message
-            if (rules.al_isAfkDisconnect()) {
-                // Reset flag for future disconnects
-                rules.al_setAfkDisconnect(false);
-                ci.cancel();
-                return;
-            }
-            ((LogoutRules) this.player).al_onRealDisconnect();
-            ci.cancel();
-        }
-    }
+	/**
+	 * Injects into the disconnect method to ensure /afk disconnects do not trigger combat log messages or dummies.
+	 * Cancels disconnect if AFK, otherwise handles as normal.
+	 * @param disconnectionInfo the disconnection info
+	 * @param ci callback info
+	 */
+	@Inject(method = "onDisconnected", at = @At("HEAD"), cancellable = true)
+	private void al$onDisconnect(DisconnectionInfo disconnectionInfo, CallbackInfo ci) {
+		// Generic disconnect is handled by MConnection#al_handleDisconnection
+		LogoutRules rules = (LogoutRules) this.getPlayer();
+		if (!rules.al_allowDisconnect()
+				&& disconnectionInfo.reason() == AntiLogout.AFK_MESSAGE) {
+			// If this is an AFK disconnect, do not trigger combat log message
+			if (rules.al_isAfkDisconnect()) {
+				// Reset flag for future disconnects
+				rules.al_setAfkDisconnect(false);
+				ci.cancel();
+				return;
+			}
+			((LogoutRules) this.player).al_onRealDisconnect();
+			ci.cancel();
+		}
+	}
 }

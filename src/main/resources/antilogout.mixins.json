@@ -1,17 +1,17 @@
 {
-  "required": true,
-  "package": "org.samo_lego.antilogout.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "MixinConnection",
-    "MixinPlayerList",
-    "MixinServerCommonPacketListenerImpl",
-    "MixinServerConnectionListener",
-    "MixinServerGamePacketListenerImpl",
-    "MixinServerPlayerDeathMsgSaver",
-    "MixinServerPlayerLogoutRules"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+	"required": true,
+	"package": "org.samo_lego.antilogout.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"mixins": [
+		"MixinConnection",
+		"MixinPlayerList",
+		"MixinServerCommonPacketListenerImpl",
+		"MixinServerConnectionListener",
+		"MixinServerGamePacketListenerImpl",
+		"MixinServerPlayerDeathMsgSaver",
+		"MixinServerPlayerLogoutRules"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
 }
