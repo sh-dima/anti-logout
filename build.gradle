@@ -113,8 +113,6 @@ remapJar {
     input.set(shadowJar.archiveFile)
 }
 
-def ENV = System.getenv()
-
 publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
