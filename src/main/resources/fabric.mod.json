@@ -35,8 +35,8 @@
 		}
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/project/3hMLwQGv",
+		"sources": "https://github.com/sh-dima/anti-logout"
 	},
 	"license": "LGPL-3.0",
 	"icon": "assets/antilogout/icon.png",
