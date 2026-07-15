@@ -6,6 +6,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import org.samo_lego.antilogout.config.ConfigManager;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -52,7 +53,7 @@ public class AntiLogoutCommand {
 
 	// Sets config value by user-friendly option name
 	private static boolean setConfigValueByOption(String option, String value,
-			org.samo_lego.antilogout.config.ConfigManager.Config config) {
+			ConfigManager.Config config) {
 		try {
 			return switch (option) {
 				case "disableAllLogouts" -> {
@@ -156,14 +157,14 @@ public class AntiLogoutCommand {
 				.then(CommandManager.literal("reload")
 					.requires(source -> source.hasPermissionLevel(2))
 					.executes(ctx -> {
-						org.samo_lego.antilogout.config.ConfigManager.load();
+						ConfigManager.load();
 						ctx.getSource().sendFeedback(() -> Text.literal("AntiLogout config reloaded! (All changes applied immediately.)"), true);
 						return 1;
 					})
 				)
 				.then(CommandManager.literal("status")
 					.executes(ctx -> {
-						var config = org.samo_lego.antilogout.config.ConfigManager.config;
+						var config = ConfigManager.config;
 						ctx.getSource().sendFeedback(() -> Text.literal(formatStatus(config)), false);
 						return 1;
 					})
@@ -172,7 +173,7 @@ public class AntiLogoutCommand {
 					.then(CommandManager.argument("option", StringArgumentType.word())
 						.suggests(CONFIG_OPTION_SUGGESTIONS)
 						.executes(ctx -> {
-							var config = org.samo_lego.antilogout.config.ConfigManager.config;
+							var config = ConfigManager.config;
 							String option = StringArgumentType.getString(ctx, "option");
 							Object value = getConfigValueByOption(option, config);
 							if (value == null) {
@@ -201,13 +202,13 @@ public class AntiLogoutCommand {
 								return CompletableFuture.completedFuture(builder.build());
 							})
 							.executes(ctx -> {
-								var config = org.samo_lego.antilogout.config.ConfigManager.config;
+								var config = ConfigManager.config;
 								String option = StringArgumentType.getString(ctx, "option");
 								String value = StringArgumentType.getString(ctx, "value");
 								boolean success = setConfigValueByOption(option, value, config);
 								if (success) {
-									org.samo_lego.antilogout.config.ConfigManager.save();
-									org.samo_lego.antilogout.config.ConfigManager.load();
+									ConfigManager.save();
+									ConfigManager.load();
 									ctx.getSource().sendFeedback(
 										() -> Text.literal("Set " + option + " to " + value + ". (Change applied immediately.)"),
 										true);

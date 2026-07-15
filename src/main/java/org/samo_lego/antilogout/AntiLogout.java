@@ -11,6 +11,7 @@ import net.minecraft.text.Text;
 import org.samo_lego.antilogout.command.AfkCommand;
 import org.samo_lego.antilogout.command.AntiLogoutCommand;
 import org.samo_lego.antilogout.config.ConfigManager;
+import org.samo_lego.antilogout.datatracker.LogoutRules;
 import org.samo_lego.antilogout.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class AntiLogout implements DedicatedServerModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
 			SERVER = null;
 			// Clear fake/disconnected players to prevent ghosts after restart
-			org.samo_lego.antilogout.datatracker.LogoutRules.DISCONNECTED_PLAYERS.clear();
+			LogoutRules.DISCONNECTED_PLAYERS.clear();
 		});
 
 		// Register event listeners for combat, death, and player join

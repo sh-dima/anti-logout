@@ -1,7 +1,6 @@
 package org.samo_lego.antilogout.command;
 
-import java.util.Collections;
-import java.util.Objects;
+import java.util.*;
 
 import org.samo_lego.antilogout.AntiLogout;
 import static org.samo_lego.antilogout.AntiLogout.config;
@@ -76,7 +75,7 @@ public class AfkCommand {
 	/**
 	 * Simple cooldown map for self-AFK to prevent command spamming.
 	 */
-	 private static final java.util.Map<java.util.UUID, Long> afkCooldowns = new java.util.HashMap<>();
+	 private static final Map<UUID, Long> afkCooldowns = new HashMap<>();
 	
 	 /**
 	 * Cooldown time in milliseconds for self-AFK command.

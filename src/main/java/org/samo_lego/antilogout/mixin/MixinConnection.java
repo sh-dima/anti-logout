@@ -4,6 +4,8 @@ import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.listener.PacketListener;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.text.Text;
+import org.samo_lego.antilogout.AntiLogout;
 import org.samo_lego.antilogout.datatracker.LogoutRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,8 +38,8 @@ public abstract class MixinConnection {
 					var server = player.getServer();
 					if (server != null) {
 						server.getPlayerManager().broadcast(
-								net.minecraft.text.Text
-										.literal(player.getName().getString() + " " + org.samo_lego.antilogout.AntiLogout.config.combatLog.combatDisconnectMessage),
+								Text
+										.literal(player.getName().getString() + " " + AntiLogout.config.combatLog.combatDisconnectMessage),
 								false);
 					}
 				}
