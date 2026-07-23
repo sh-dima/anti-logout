@@ -1,43 +1,16 @@
-# gradle
-
+# Ignore Gradle project-specific cache directory
 .gradle/
+
+# Ignore Gradle wrapper
+gradle/wrapper/
 gradlew
 gradlew.bat
-gradle/wrapper/
+
+# Ignore Gradle build output directory
 build/
-out/
-classes/
 
-# eclipse
-
-*.launch
-
-# idea
-
-.idea/
-*.iml
-*.ipr
-*.iws
-
-# vscode
-
-.settings/
-.vscode/
-bin/
-.classpath
-.project
-
-# macos
-
-*.DS_Store
-
-# fabric
-
+# Client and server test runs
 run/
 
-# java
-
-hs_err_*.log
-replay_*.log
-*.hprof
-*.jfr
+# Java crashes / out of memory errors
+java_pid*.hprof
