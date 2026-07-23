@@ -96,7 +96,6 @@ tasks.withType<AbstractArchiveTask>().configureEach {
 }
 
 java {
-	withSourcesJar()
 	sourceCompatibility = JavaVersion.VERSION_21
 	targetCompatibility = JavaVersion.VERSION_21
 }
@@ -116,6 +115,9 @@ val shadowJar by tasks.named<ShadowJar>("shadowJar") {
 tasks.named<RemapJarTask>("remapJar") {
 	dependsOn(shadowJar)
 	inputFile.set(shadowJar.archiveFile)
+	doLast {
+		shadowJar.archiveFile.get().asFile.delete()
+	}
 }
 
 publishing {
