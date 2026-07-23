@@ -10,10 +10,6 @@ plugins {
 version = "2.1.0"
 group = "org.samo_lego"
 
-base {
-	archivesName.set("antilogout")
-}
-
 repositories {
 	maven("https://maven.fabricmc.net/")
 	maven("https://oss.sonatype.org/content/repositories/snapshots")
@@ -24,9 +20,8 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		create("modid") {
+		create(name) {
 			sourceSet("main")
-			sourceSet("client")
 		}
 	}
 }
@@ -46,20 +41,36 @@ dependencies {
 	shadowOnly(libs.config.toml)
 }
 
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
 tasks.processResources {
 	inputs.property("version", project.version)
+	inputs.property("minecraft_version", libs.versions.minecraft.get())
+	inputs.property("fabric_version", libs.versions.fabric.loader.get())
+	inputs.property("fabric_api_version", libs.versions.fabric.api.get())
+	inputs.property("java_version", java.toolchain.languageVersion.get().asInt())
+
+	inputs.property("name", project.name)
+	inputs.property("group", project.group)
 
 	filesMatching("fabric.mod.json") {
 		expand(
 			mapOf(
+				"name" to inputs.properties["name"],
+				"group" to inputs.properties["group"],
+
+				"minecraft_version" to inputs.properties["minecraft_version"],
+				"fabric_version" to inputs.properties["fabric_version"],
+				"fabric_api_version" to inputs.properties["fabric_api_version"],
+				"java_version" to inputs.properties["java_version"],
 				"version" to inputs.properties["version"],
 			),
 		)
 	}
-}
-
-tasks.withType<JavaCompile>().configureEach {
-	options.release.set(21)
 }
 
 tasks.withType<AbstractArchiveTask>().configureEach {
@@ -95,39 +106,24 @@ tasks.withType<AbstractArchiveTask>().configureEach {
 	}
 }
 
-java {
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
-}
-
 tasks.named<Jar>("jar") {
 	inputs.property("archivesName", project.base.archivesName)
-
-	from("LICENSE") {
-		rename { "${it}_${inputs.properties["archivesName"]}" }
-	}
 }
 
 val shadowJar by tasks.named<ShadowJar>("shadowJar") {
 	configurations = listOf(shadowOnly)
-	relocate("com.electronwill.nightconfig", "org.samo_lego.antilogout.shadow.nightconfig")
+	enableAutoRelocation = true
+	relocationPrefix = "${project.group}.${project.name}.shadow"
+
+	into("META-INF/") {
+		from("LICENSE")
+		from("NOTICE")
+	}
 }
 tasks.named<RemapJarTask>("remapJar") {
 	dependsOn(shadowJar)
 	inputFile.set(shadowJar.archiveFile)
 	doLast {
 		shadowJar.archiveFile.get().asFile.delete()
-	}
-}
-
-publishing {
-	publications {
-		create<MavenPublication>("mavenJava") {
-			artifactId = "antilogout"
-			from(components["java"])
-		}
-	}
-	repositories {
-		// Add repositories to publish to here.
 	}
 }

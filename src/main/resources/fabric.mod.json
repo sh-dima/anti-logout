@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "antilogout",
+	"id": "${name}",
 	"version": "${version}",
 	"name": "Fair Combat",
 	"description": "No more combat-logouts.",
@@ -39,20 +39,20 @@
 		"sources": "https://github.com/sh-dima/anti-logout"
 	},
 	"license": "LGPL-3.0",
-	"icon": "assets/antilogout/icon.png",
+	"icon": "assets/${name}/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"server": [
-			"org.samo_lego.antilogout.AntiLogout"
+			"${group}.${name}.AntiLogout"
 		]
 	},
 	"mixins": [
-		"antilogout.mixins.json"
+		"${name}.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.14.12",
-		"minecraft": ">=1.19.3",
-		"java": ">=17",
+		"fabricloader": ">=${fabric_version}",
+		"minecraft": "${minecraft_version}",
+		"java": ">=${java_version}",
 		"fabric-api": "*"
 	}
 }
