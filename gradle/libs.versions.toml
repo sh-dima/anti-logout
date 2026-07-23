@@ -12,7 +12,7 @@ config-toml = "3.9.0"
 
 fabric-loom = "1.13.6"
 
-shadow = "8.1.1"
+shadow = "9.6.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -28,5 +28,5 @@ config-toml = { module = "com.electronwill.night-config:toml", version.ref = "co
 [plugins]
 fabric-loom = { id = "fabric-loom", version.ref = "fabric-loom" }
 
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 publish = { id = "maven-publish" }

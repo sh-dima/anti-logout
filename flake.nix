@@ -16,7 +16,7 @@
 			in {
 				devShell = pkgs.mkShell {
 					nativeBuildInputs = with pkgs; [
-						gradle
+						gradle_9
 						openjdk21
 					];
 
