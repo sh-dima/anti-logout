@@ -20,6 +20,8 @@
 						openjdk21
 
 						gimp
+						pngcrush
+						imagemagick
 					];
 
 					env = {

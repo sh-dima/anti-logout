@@ -73,10 +73,10 @@ val exportIcon by tasks.registering(Exec::class) {
 	}
 
 	commandLine(
-		"gimp-console",
-		"--batch-interpreter=python-fu-eval",
-		"-b",
+		"sh",
+		"-c",
 		"""
+		gimp-console --batch-interpreter=python-fu-eval --quit --batch '
 		from gi.repository import Gimp, Gio
 
 		image = Gimp.file_load(
@@ -92,8 +92,12 @@ val exportIcon by tasks.registering(Exec::class) {
 		)
 
 		image.delete()
+		' &&
+
+		pngcrush -rem iCCP -ow "${outputFile.absolutePath}" &&
+
+		magick "${outputFile.absolutePath}" -strip "${outputFile.absolutePath}"
 		""".trimIndent(),
-		"--quit",
 	)
 }
 
