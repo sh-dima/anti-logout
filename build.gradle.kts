@@ -108,6 +108,7 @@ tasks.processResources {
 	inputs.property("minecraft_version", libs.versions.minecraft.get())
 	inputs.property("fabric_version", libs.versions.fabric.loader.get())
 	inputs.property("fabric_api_version", libs.versions.fabric.api.get())
+	inputs.property("fabric_permissions_version", libs.versions.fabric.permissions.get())
 	inputs.property("java_version", java.toolchain.languageVersion.get().asInt())
 
 	inputs.property("name", project.name)
@@ -122,6 +123,7 @@ tasks.processResources {
 				"minecraft_version" to inputs.properties["minecraft_version"],
 				"fabric_version" to inputs.properties["fabric_version"],
 				"fabric_api_version" to inputs.properties["fabric_api_version"],
+				"fabric_permissions_version" to inputs.properties["fabric_permissions_version"],
 				"java_version" to inputs.properties["java_version"],
 				"version" to inputs.properties["version"],
 			),
