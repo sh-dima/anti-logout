@@ -5,15 +5,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: install Nix
+      - name: Install Nix
         uses: cachix/install-nix-action@v25
         with:
           extra_nix_config: extra-experimental-features = nix-command flakes
-      - name: build
+      - name: Build
         run: nix develop --ignore-environment --command gradle build
-      - name: capture build artifacts
+      - name: Upload artifact(s)
         uses: actions/upload-artifact@v4
         with:
           name: build
