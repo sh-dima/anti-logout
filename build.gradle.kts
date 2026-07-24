@@ -175,6 +175,10 @@ val shadowJar by tasks.named<ShadowJar>("shadowJar") {
 		from("LICENSE.txt")
 		from("NOTICE.txt")
 		from("docs/DISCLAIMER.txt")
+
+		from("assets/text/licenses") {
+			into("licenses")
+		}
 	}
 }
 tasks.named<RemapJarTask>("remapJar") {
