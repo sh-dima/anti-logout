@@ -172,8 +172,9 @@ val shadowJar by tasks.named<ShadowJar>("shadowJar") {
 	relocationPrefix = "${project.group}.${project.name}.shadow"
 
 	into("META-INF/") {
-		from("LICENSE")
-		from("NOTICE")
+		from("LICENSE.txt")
+		from("NOTICE.txt")
+		from("docs/DISCLAIMER.txt")
 	}
 }
 tasks.named<RemapJarTask>("remapJar") {
