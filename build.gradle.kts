@@ -47,7 +47,59 @@ java {
 	}
 }
 
+val generatedResources: Directory = layout.buildDirectory.dir("generated/resources").get()
+
+sourceSets {
+	getByName("main") {
+		resources {
+			exclude("assets/${project.name}/icon.xcf")
+			srcDir(generatedResources)
+		}
+	}
+}
+
+val exportIcon by tasks.registering(Exec::class) {
+	group = "build"
+	description = "Exports icon.xcf to icon.png using ImageMagick."
+
+	val inputFile = file("src/main/resources/assets/${project.name}/icon.xcf")
+	val outputFile = generatedResources.file("assets/${project.name}/icon.png").asFile
+
+	inputs.file(inputFile)
+	outputs.file(outputFile)
+
+	doFirst {
+		outputFile.parentFile.mkdirs()
+	}
+
+	commandLine(
+		"gimp-console",
+		"--batch-interpreter=python-fu-eval",
+		"-b",
+		"""
+		from gi.repository import Gimp, Gio
+
+		image = Gimp.file_load(
+			Gimp.RunMode.NONINTERACTIVE,
+			Gio.File.new_for_path("${inputFile.absolutePath}"),
+		)
+
+		Gimp.file_save(
+			Gimp.RunMode.NONINTERACTIVE,
+			image,
+			Gio.File.new_for_path("${outputFile.absolutePath}"),
+			None,
+		)
+
+		image.delete()
+		""".trimIndent(),
+		"--quit",
+	)
+}
+
 tasks.processResources {
+	dependsOn(exportIcon)
+
 	inputs.property("version", project.version)
 	inputs.property("minecraft_version", libs.versions.minecraft.get())
 	inputs.property("fabric_version", libs.versions.fabric.loader.get())

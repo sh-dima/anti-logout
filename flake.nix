@@ -18,6 +18,8 @@
 					nativeBuildInputs = with pkgs; [
 						gradle_9
 						openjdk21
+
+						gimp
 					];
 
 					env = {
