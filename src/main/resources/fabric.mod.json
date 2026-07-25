@@ -55,6 +55,6 @@
 		"minecraft": "${minecraft_version}",
 		"java": ">=${java_version}",
 		"fabric-permissions-api-v0": ">=${fabric_permissions_version}",
-		"fabric-api": "*"
+		"fabric-api": ">=${fabric_api_version}"
 	}
 }
