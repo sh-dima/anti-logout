@@ -7,7 +7,7 @@ plugins {
 	alias(libs.plugins.publish)
 }
 
-version = "2.1.0"
+version = "2.2.0"
 group = "org.samo_lego"
 
 repositories {
