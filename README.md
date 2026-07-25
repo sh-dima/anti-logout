@@ -1,6 +1,8 @@
 Anti-Dangerlog
 ==============
 
+*Fork of [Anti-Combatlog](https://modrinth.com/project/rflThpVC), which is a fork of [AntiLogout](https://modrinth.com/project/gnfTfbZi)*
+
 Overview
 --------
 
