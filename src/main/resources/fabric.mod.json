@@ -39,7 +39,7 @@
 		"issues": "https://github.com/sh-dima/anti-logout/issues",
 		"sources": "https://github.com/sh-dima/anti-logout"
 	},
-	"license": "LGPL-3.0",
+	"license": "LGPL-3.0-only",
 	"icon": "assets/${name}/icon.png",
 	"environment": "*",
 	"entrypoints": {
