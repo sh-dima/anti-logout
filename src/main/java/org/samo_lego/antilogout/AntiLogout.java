@@ -24,12 +24,6 @@ public class AntiLogout implements DedicatedServerModInitializer {
 	public static final Text AFK_MESSAGE;
 
 	/**
-	 * Static reference to the current MinecraftServer instance.
-	 * Used for accessing the server from anywhere in the mod.
-	 */
-	public static MinecraftServer SERVER = null;
-
-	/**
 	 * Loads the configuration and initializes the AFK message.
 	 * This static block ensures config is loaded before the mod is initialized.
 	 */
@@ -45,10 +39,8 @@ public class AntiLogout implements DedicatedServerModInitializer {
 	 */
 	@Override
 	public void onInitializeServer() {
-		// Register server lifecycle events to track the server instance and cleanup on stop
-		ServerLifecycleEvents.SERVER_STARTED.register(server -> SERVER = server);
+		// Register server lifecycle event to cleanup on stop
 		ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-			SERVER = null;
 			// Clear fake/disconnected players to prevent ghosts after restart
 			LogoutRules.DISCONNECTED_PLAYERS.clear();
 		});
