@@ -41,14 +41,17 @@
 	},
 	"license": "LGPL-3.0-only",
 	"icon": "assets/${name}/icon.png",
-	"environment": "*",
+	"environment": "server",
 	"entrypoints": {
 		"server": [
 			"${group}.${name}.AntiLogout"
 		]
 	},
 	"mixins": [
-		"${name}.mixins.json"
+		{
+			"config": "${name}.mixins.json",
+			"environment": "server"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=${fabric_version}",
