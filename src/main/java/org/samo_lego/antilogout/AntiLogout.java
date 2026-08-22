@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 import org.samo_lego.antilogout.command.AfkCommand;
 import org.samo_lego.antilogout.command.AntiLogoutCommand;
