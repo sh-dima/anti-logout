@@ -52,6 +52,11 @@ public interface LogoutRules {
 	boolean al_allowDisconnect();
 
 	/**
+	 * Returns how much time is left until the player can disconnect.
+	 */
+	long al_timeUntilDisconnectAllowed();
+
+	/**
 	 * Sets the system time (in ms) when the player is allowed to disconnect without leaving a dummy.
 	 * @param systemTime time in milliseconds when disconnect is allowed
 	 */
@@ -72,9 +77,7 @@ public interface LogoutRules {
 		this.al_setAllowDisconnectAt(systemTime);
 
 		if (AntiLogout.config.combatLog.notifyOnCombat) {
-			// Notify player about entering combat
 			long duration = (long) Math.ceil((systemTime - System.currentTimeMillis()) / 1000.0D);
-			((ServerPlayerEntity) this).sendMessage(this.al$getStartCombatMessage(duration), true);
 
 			this.al$delay(systemTime,
 					() -> ((ServerPlayerEntity) this).sendMessage(this.al$getEndCombatMessage(duration), true));
@@ -95,9 +98,9 @@ public interface LogoutRules {
 	 * @return the combat start message
 	 */
 	@ApiStatus.Internal
-	default Text al$getStartCombatMessage(long duration) {
+	default Text al$getInCombatMessage(long duration) {
 		return Text.literal("[AL] ").formatted(Formatting.DARK_RED).append(
-				Text.translatable(AntiLogout.config.combatLog.combatEnterMessage, duration)
+				Text.literal(AntiLogout.config.combatLog.inCombatMessage.replace("{time}", String.valueOf(duration)))
 						.formatted(Formatting.RED));
 	}
 

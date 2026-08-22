@@ -17,7 +17,7 @@ public class AntiLogoutCommand {
 			"disableAllLogouts",
 			"combatTimeout",
 			"notifyOnCombat",
-			"combatEnterMessage",
+			"inCombatMessage",
 			"combatEndMessage",
 			"playerHurtOnly",
 			"bypassPermissionLevel",
@@ -40,7 +40,7 @@ public class AntiLogoutCommand {
 			case "disableAllLogouts" -> config.general.disableAllLogouts;
 			case "combatTimeout" -> config.combatLog.combatTimeout;
 			case "notifyOnCombat" -> config.combatLog.notifyOnCombat;
-			case "combatEnterMessage" -> config.combatLog.combatEnterMessage;
+			case "inCombatMessage" -> config.combatLog.inCombatMessage;
 			case "combatEndMessage" -> config.combatLog.combatEndMessage;
 			case "playerHurtOnly" -> config.combatLog.playerHurtOnly;
 			case "bypassPermissionLevel" -> config.combatLog.bypassPermissionLevel;
@@ -68,8 +68,8 @@ public class AntiLogoutCommand {
 					config.combatLog.notifyOnCombat = Boolean.parseBoolean(value);
 					yield true;
 				}
-				case "combatEnterMessage" -> {
-					config.combatLog.combatEnterMessage = value;
+				case "inCombatMessage" -> {
+					config.combatLog.inCombatMessage = value;
 					yield true;
 				}
 				case "combatEndMessage" -> {
@@ -115,7 +115,7 @@ public class AntiLogoutCommand {
 			"  disableAllLogouts: " + config.general.disableAllLogouts + "\n" +
 			"  combatTimeout: " + config.combatLog.combatTimeout + "\n" +
 			"  notifyOnCombat: " + config.combatLog.notifyOnCombat + "\n" +
-			"  combatEnterMessage: " + config.combatLog.combatEnterMessage + "\n" +
+			"  inCombatMessage: " + config.combatLog.inCombatMessage + "\n" +
 			"  combatEndMessage: " + config.combatLog.combatEndMessage + "\n" +
 			"  playerHurtOnly: " + config.combatLog.playerHurtOnly + "\n" +
 			"  bypassPermissionLevel: " + config.combatLog.bypassPermissionLevel + "\n" +
@@ -149,7 +149,7 @@ public class AntiLogoutCommand {
 										/antilogout status - Shows current config values.
 										/antilogout get <option> - Gets a config value.
 										/antilogout set <option> <value> - Sets a config value.
-										Options: disableAllLogouts, combatTimeout, notifyOnCombat, combatEnterMessage, combatEndMessage, playerHurtOnly, bypassPermissionLevel, afkMessage, permissionLevel, maxAfkTime"""
+										Options: disableAllLogouts, combatTimeout, notifyOnCombat, inCombatMessage, combatEndMessage, playerHurtOnly, bypassPermissionLevel, afkMessage, permissionLevel, maxAfkTime"""
 						), false);
 						return 1;
 					})

@@ -35,7 +35,7 @@ All options are in `config/antilogout.toml`.
 * `afkMessage`: Message shown when a player is AFK.
 * `afkCombatMessage`: Message shown if a player tries to go AFK while in combat.
 * `afkBroadcastMessage`: Broadcast when a player goes AFK (`{player}` = name).
-* `combatEnterMessage`: Message when entering combat.
+* `inCombatMessage`: Message during combat.
 * `combatEndMessage`: Message when leaving combat.
 * `combatTimeout`: How long a player is considered in combat (seconds).
 * `combatDisconnectMessage`: Message when a player disconnects during combat.

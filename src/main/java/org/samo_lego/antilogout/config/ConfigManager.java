@@ -34,7 +34,7 @@ public class ConfigManager {
 		config.afk.afkBroadcastMessage = configData.getOrElse("afk.afkBroadcastMessage", config.afk.afkBroadcastMessage);
 		// CombatLog
 		config.combatLog.notifyOnCombat = configData.getOrElse("combatLog.notifyOnCombat", config.combatLog.notifyOnCombat);
-		config.combatLog.combatEnterMessage = configData.getOrElse("combatLog.combatEnterMessage", config.combatLog.combatEnterMessage);
+		config.combatLog.inCombatMessage = configData.getOrElse("combatLog.inCombatMessage", config.combatLog.inCombatMessage);
 		config.combatLog.combatEndMessage = configData.getOrElse("combatLog.combatEndMessage", config.combatLog.combatEndMessage);
 		config.combatLog.combatTimeout = configData.getOrElse("combatLog.combatTimeout", config.combatLog.combatTimeout);
 		config.combatLog.playerHurtOnly = configData.getOrElse("combatLog.playerHurtOnly", config.combatLog.playerHurtOnly);
@@ -68,8 +68,8 @@ public class ConfigManager {
 		// CombatLog
 		configData.setComment("combatLog.notifyOnCombat", "Notify on combat");
 		configData.set("combatLog.notifyOnCombat", config.combatLog.notifyOnCombat);
-		configData.setComment("combatLog.combatEnterMessage", "Message on entering combat");
-		configData.set("combatLog.combatEnterMessage", config.combatLog.combatEnterMessage);
+		configData.setComment("combatLog.inCombatMessage", "Message during combat");
+		configData.set("combatLog.inCombatMessage", config.combatLog.inCombatMessage);
 		configData.setComment("combatLog.combatEndMessage", "Message on leaving combat");
 		configData.set("combatLog.combatEndMessage", config.combatLog.combatEndMessage);
 		configData.setComment("combatLog.combatTimeout", "Combat timeout in seconds");
@@ -100,8 +100,8 @@ public class ConfigManager {
 		}
 		public static class CombatLog {
 			public boolean notifyOnCombat = true;
-			public String combatEnterMessage = "You are in combat!";
 			public String combatEndMessage = "You are no longer in combat!";
+			public String inCombatMessage = "\uD83D\uDDE1 {time}";
 			public int combatTimeout = 30;
 			public boolean playerHurtOnly = true;
 			public int bypassPermissionLevel = 4;

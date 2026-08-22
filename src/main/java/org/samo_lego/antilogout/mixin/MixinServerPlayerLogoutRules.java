@@ -68,6 +68,11 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 				&& !AntiLogout.config.general.disableAllLogouts;
 	}
 
+	@Override
+	public long al_timeUntilDisconnectAllowed() {
+		return (al_getAllowDisconnectTime() - System.currentTimeMillis()) / 1000L;
+	}
+
 	/**
 	 * Sets the system time (in ms) when the player is allowed to disconnect.
 	 * @param systemTime time in milliseconds when disconnect is allowed
@@ -136,6 +141,7 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 	/**
 	 * Handles ticking for fake/disconnected players and delayed tasks.
 	 * Cancels tick if player is fake/disconnected.
+	 * Sends the 'in combat' message to players in combat.
 	 * @param ci callback info
 	 */
 	@Inject(method = "playerTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;getInventory()Lnet/minecraft/entity/player/PlayerInventory;"), cancellable = true)
@@ -149,6 +155,10 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 		} else if (this.delayedTask != null && this.taskTime <= System.currentTimeMillis()) {
 			this.delayedTask.run();
 			this.delayedTask = null;
+		}
+
+		if (!this.al_allowDisconnect() && AntiLogout.config.combatLog.notifyOnCombat) {
+			((ServerPlayerEntity) (Object) this).sendMessage(al$getInCombatMessage(al_timeUntilDisconnectAllowed()), true);
 		}
 	}
 
