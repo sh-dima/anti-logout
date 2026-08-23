@@ -49,10 +49,6 @@ Commands
   Set yourself AFK for a specific time (`-1` for unlimited). (Permission level 0)
 * `/afk players <targets> [time <seconds>]`  
   Set other players AFK. (Admin only, permission level 4)
-* `/antilogout reload`  
-  Reload the config file. (Admin only, permission level 4)
-* `/antilogout status`  
-  Show current config summary. (Admin only, permission level 4)
 
 Permissions
 -----------
@@ -61,9 +57,6 @@ Permissions
 * `antilogout.command.afk` — Use `/afk` (level 0).
 * `antilogout.command.afk.time` — Set AFK time for yourself (level 0).
 * `antilogout.command.afk.players` — Set other players AFK (admin only, level 4).
-* `antilogout.command.antilogout` — Use `/antilogout` admin commands (level 4).
-* `antilogout.command.antilogout.reload` — Reload config (level 4).
-* `antilogout.command.antilogout.edit` — Edit config in-game (if enabled, level 4).
 
 Example Usage
 -------------

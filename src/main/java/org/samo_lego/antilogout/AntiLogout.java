@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.text.Text;
 import org.samo_lego.antilogout.command.AfkCommand;
-import org.samo_lego.antilogout.command.AntiLogoutCommand;
 import org.samo_lego.antilogout.config.ConfigManager;
 import org.samo_lego.antilogout.datatracker.LogoutRules;
 import org.samo_lego.antilogout.event.EventHandler;
@@ -34,7 +33,7 @@ public class AntiLogout implements DedicatedServerModInitializer {
 
 	/**
 	 * Initializes the AntiLogout mod on the dedicated server.
-	 * Registers all event listeners and commands, and manages server lifecycle hooks.
+	 * Registers all event listeners and the AFK command, and manages server lifecycle hooks.
 	 */
 	@Override
 	public void onInitializeServer() {
@@ -49,10 +48,9 @@ public class AntiLogout implements DedicatedServerModInitializer {
 		ServerLivingEntityEvents.AFTER_DEATH.register(EventHandler::onDeath);
 		ServerPlayConnectionEvents.JOIN.register(EventHandler::onPlayerJoin);
 
-		// Register commands for AFK and AntiLogout
+		// Register AFK command
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 			AfkCommand.register(dispatcher);
-			AntiLogoutCommand.register(dispatcher);
 		});
 
 		LOGGER.info("AntiLogout initialized.");
