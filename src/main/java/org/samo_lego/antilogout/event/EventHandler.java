@@ -1,6 +1,5 @@
 package org.samo_lego.antilogout.event;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -42,19 +41,18 @@ public class EventHandler {
 	 */
 	public static ActionResult onAttack(PlayerEntity attacker, World _level, Hand _interactionHand,
 			Entity target, @Nullable EntityHitResult _entityHitResult) {
-		if (target instanceof PlayerEntity) {
+		if (target instanceof PlayerEntity playerTarget) {
 			long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
 
 			// Mark target
 			if (target instanceof LogoutRules logoutTarget
-					&& !Permissions.check(target, "antilogout.bypass.combat", AntiLogout.config.combatLog.bypassPermissionLevel)) {
+				&& !playerTarget.hasPermissionLevel(AntiLogout.config.combatLog.bypassPermissionLevel)) {
 				logoutTarget.al_setInCombatUntil(allowedDc);
 			}
 
 			// Mark attacker
 			if (attacker instanceof LogoutRules logoutAttacker
-					&& !Permissions.check(attacker, "antilogout.bypass.combat",
-							AntiLogout.config.combatLog.bypassPermissionLevel)) {
+				&& !attacker.hasPermissionLevel(AntiLogout.config.combatLog.bypassPermissionLevel)) {
 				logoutAttacker.al_setInCombatUntil(allowedDc);
 			}
 		}

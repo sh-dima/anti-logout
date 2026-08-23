@@ -9,7 +9,6 @@ import org.samo_lego.antilogout.datatracker.LogoutRules;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.server.command.CommandManager;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -18,18 +17,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 public class AfkCommand {
-
-	/**
-	 * Checks if a command source has the required permission and level.
-	 *
-	 * @param source     the command source
-	 * @param permission the permission string
-	 * @param level      the required permission level
-	 * @return true if allowed, false otherwise
-	 */
-	private static boolean hasPermission(ServerCommandSource source, String permission, int level) {
-		return Permissions.check(source, permission, level);
-	}
 
 	/**
 	 * Registers the /afk command and all its subcommands.
@@ -44,7 +31,7 @@ public class AfkCommand {
 	 */
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(literal("afk")
-			.requires(src -> hasPermission(src, "antilogout.command.afk", config.afk.permissionLevel))
+			.requires(src -> src.hasPermissionLevel(config.afk.permissionLevel))
 			.then(literal("help")
 				.executes(ctx -> {
 					ctx.getSource().sendFeedback(() -> Text.literal("""
@@ -55,17 +42,17 @@ public class AfkCommand {
 				})
 			)
 			.then(literal("players")
-				.requires(src -> hasPermission(src, "antilogout.command.afk.players", 4))
+				.requires(src -> src.hasPermissionLevel(4))
 				.then(CommandManager.argument("targets", EntityArgumentType.players())
 					.then(literal("time")
-						.requires(src -> hasPermission(src, "antilogout.command.afk.players.time", config.afk.permissionLevel))
+						.requires(src -> src.hasPermissionLevel(config.afk.permissionLevel))
 						.then(CommandManager.argument("time", DoubleArgumentType.doubleArg(-1, config.afk.maxAfkTime == -1 ? Double.MAX_VALUE : config.afk.maxAfkTime))
 							.executes(ctx -> afkPlayers(ctx.getSource(), EntityArgumentType.getPlayers(ctx, "targets"), DoubleArgumentType.getDouble(ctx, "time")))))
 					.executes(ctx -> afkPlayers(ctx.getSource(), EntityArgumentType.getPlayers(ctx, "targets"), config.afk.maxAfkTime))
 				)
 			)
 			.then(literal("time")
-				.requires(src -> hasPermission(src, "antilogout.command.afk.time", config.afk.permissionLevel))
+				.requires(src -> src.hasPermissionLevel(config.afk.permissionLevel))
 				.then(CommandManager.argument("time", DoubleArgumentType.doubleArg(-1, config.afk.maxAfkTime == -1 ? Double.MAX_VALUE : config.afk.maxAfkTime))
 					.executes(ctx -> afkPlayers(ctx.getSource(), Collections.singletonList(ctx.getSource().getPlayerOrThrow()), DoubleArgumentType.getDouble(ctx, "time")))))
 			.executes(ctx -> afkPlayers(ctx.getSource(), Collections.singleton(ctx.getSource().getPlayerOrThrow()), config.afk.maxAfkTime))

@@ -14,7 +14,6 @@ Features
 * Prevents combat logging: players who log out during combat remain in the world.
 * `/afk` command: lets players log out with the account still online, with optional time limits.
 * Configurable messages and timeouts.
-* Permission-based command and feature access.
 
 Installation
 ------------
@@ -49,14 +48,6 @@ Commands
   Set yourself AFK for a specific time (`-1` for unlimited). (Permission level 0)
 * `/afk players <targets> [time <seconds>]`  
   Set other players AFK. (Admin only, permission level 4)
-
-Permissions
------------
-
-* `antilogout.bypass.combat` — Bypass combat tagging.
-* `antilogout.command.afk` — Use `/afk` (level 0).
-* `antilogout.command.afk.time` — Set AFK time for yourself (level 0).
-* `antilogout.command.afk.players` — Set other players AFK (admin only, level 4).
 
 Example Usage
 -------------
