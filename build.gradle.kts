@@ -4,7 +4,6 @@ import net.fabricmc.loom.task.RemapJarTask
 plugins {
 	alias(libs.plugins.fabric.loom)
 	alias(libs.plugins.shadow)
-	alias(libs.plugins.publish)
 }
 
 version = "2.2.0"
