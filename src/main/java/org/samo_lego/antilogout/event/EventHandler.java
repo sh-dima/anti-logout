@@ -45,14 +45,12 @@ public class EventHandler {
 			long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
 
 			// Mark target
-			if (target instanceof LogoutRules logoutTarget
-				&& !playerTarget.hasPermissionLevel(AntiLogout.config.combatLog.bypassPermissionLevel)) {
+			if (target instanceof LogoutRules logoutTarget) {
 				logoutTarget.al_setInCombatUntil(allowedDc);
 			}
 
 			// Mark attacker
-			if (attacker instanceof LogoutRules logoutAttacker
-				&& !attacker.hasPermissionLevel(AntiLogout.config.combatLog.bypassPermissionLevel)) {
+			if (attacker instanceof LogoutRules logoutAttacker) {
 				logoutAttacker.al_setInCombatUntil(allowedDc);
 			}
 		}

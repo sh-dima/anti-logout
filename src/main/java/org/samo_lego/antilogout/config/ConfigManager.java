@@ -38,7 +38,6 @@ public class ConfigManager {
 		config.combatLog.combatEndMessage = configData.getOrElse("combatLog.combatEndMessage", config.combatLog.combatEndMessage);
 		config.combatLog.combatTimeout = configData.getOrElse("combatLog.combatTimeout", config.combatLog.combatTimeout);
 		config.combatLog.playerHurtOnly = configData.getOrElse("combatLog.playerHurtOnly", config.combatLog.playerHurtOnly);
-		config.combatLog.bypassPermissionLevel = configData.getOrElse("combatLog.bypassPermissionLevel", config.combatLog.bypassPermissionLevel);
 		config.combatLog.combatDisconnectMessage = configData.getOrElse("combatLog.combatDisconnectMessage", config.combatLog.combatDisconnectMessage);
 		// Always save to ensure correct structure
 		save();
@@ -76,8 +75,6 @@ public class ConfigManager {
 		configData.set("combatLog.combatTimeout", config.combatLog.combatTimeout);
 		configData.setComment("combatLog.playerHurtOnly", "Only player damage triggers");
 		configData.set("combatLog.playerHurtOnly", config.combatLog.playerHurtOnly);
-		configData.setComment("combatLog.bypassPermissionLevel", "Permission to bypass combat log");
-		configData.set("combatLog.bypassPermissionLevel", config.combatLog.bypassPermissionLevel);
 		configData.setComment("combatLog.combatDisconnectMessage", "Message for combat log disconnect");
 		configData.set("combatLog.combatDisconnectMessage", config.combatLog.combatDisconnectMessage);
 		configData.save();
@@ -104,7 +101,6 @@ public class ConfigManager {
 			public String inCombatMessage = "\uD83D\uDDE1 {time}";
 			public int combatTimeout = 30;
 			public boolean playerHurtOnly = true;
-			public int bypassPermissionLevel = 4;
 			public String combatDisconnectMessage = "disconnected while in combat!";
 		}
 	}
