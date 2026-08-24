@@ -102,26 +102,17 @@ val exportIcon by tasks.registering(Exec::class) {
 tasks.processResources {
 	dependsOn(exportIcon)
 
-	inputs.property("version", project.version)
-	inputs.property("minecraft_version", libs.versions.minecraft.get())
-	inputs.property("fabric_version", libs.versions.fabric.loader.get())
-	inputs.property("fabric_api_version", libs.versions.fabric.api.get())
-	inputs.property("java_version", java.toolchain.languageVersion.get().asInt())
-
-	inputs.property("name", project.name)
-	inputs.property("group", project.group)
-
 	filesMatching("fabric.mod.json") {
 		expand(
 			mapOf(
-				"name" to inputs.properties["name"],
-				"group" to inputs.properties["group"],
+				"name" to project.name,
+				"group" to project.group,
 
-				"minecraft_version" to inputs.properties["minecraft_version"],
-				"fabric_version" to inputs.properties["fabric_version"],
-				"fabric_api_version" to inputs.properties["fabric_api_version"],
-				"java_version" to inputs.properties["java_version"],
-				"version" to inputs.properties["version"],
+				"minecraft_version" to libs.versions.minecraft.get(),
+				"fabric_version" to libs.versions.fabric.loader.get(),
+				"fabric_api_version" to libs.versions.fabric.api.get(),
+				"java_version" to java.toolchain.languageVersion.get().asInt(),
+				"version" to project.version,
 			),
 		)
 	}
