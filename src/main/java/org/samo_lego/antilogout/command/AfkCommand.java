@@ -3,7 +3,7 @@ package org.samo_lego.antilogout.command;
 import java.util.*;
 
 import org.samo_lego.antilogout.AntiLogout;
-import static org.samo_lego.antilogout.AntiLogout.config;
+import org.samo_lego.antilogout.config.AntiLogoutConfig;
 import org.samo_lego.antilogout.datatracker.LogoutRules;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -31,7 +31,7 @@ public class AfkCommand {
 	 */
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		dispatcher.register(literal("afk")
-			.requires(src -> src.hasPermissionLevel(config.afk.permissionLevel))
+			.requires(src -> src.hasPermissionLevel(AntiLogoutConfig.CONFIG.permissionLevel()))
 			.then(literal("help")
 				.executes(ctx -> {
 					ctx.getSource().sendFeedback(() -> Text.literal("""
@@ -45,17 +45,17 @@ public class AfkCommand {
 				.requires(src -> src.hasPermissionLevel(4))
 				.then(CommandManager.argument("targets", EntityArgumentType.players())
 					.then(literal("time")
-						.requires(src -> src.hasPermissionLevel(config.afk.permissionLevel))
-						.then(CommandManager.argument("time", DoubleArgumentType.doubleArg(-1, config.afk.maxAfkTime == -1 ? Double.MAX_VALUE : config.afk.maxAfkTime))
+						.requires(src -> src.hasPermissionLevel(AntiLogoutConfig.CONFIG.permissionLevel()))
+						.then(CommandManager.argument("time", DoubleArgumentType.doubleArg(-1, AntiLogoutConfig.CONFIG.maxAfkTime() == -1 ? Double.MAX_VALUE : AntiLogoutConfig.CONFIG.maxAfkTime()))
 							.executes(ctx -> afkPlayers(ctx.getSource(), EntityArgumentType.getPlayers(ctx, "targets"), DoubleArgumentType.getDouble(ctx, "time")))))
-					.executes(ctx -> afkPlayers(ctx.getSource(), EntityArgumentType.getPlayers(ctx, "targets"), config.afk.maxAfkTime))
+					.executes(ctx -> afkPlayers(ctx.getSource(), EntityArgumentType.getPlayers(ctx, "targets"), AntiLogoutConfig.CONFIG.maxAfkTime()))
 				)
 			)
 			.then(literal("time")
-				.requires(src -> src.hasPermissionLevel(config.afk.permissionLevel))
-				.then(CommandManager.argument("time", DoubleArgumentType.doubleArg(-1, config.afk.maxAfkTime == -1 ? Double.MAX_VALUE : config.afk.maxAfkTime))
+				.requires(src -> src.hasPermissionLevel(AntiLogoutConfig.CONFIG.permissionLevel()))
+				.then(CommandManager.argument("time", DoubleArgumentType.doubleArg(-1, AntiLogoutConfig.CONFIG.maxAfkTime() == -1 ? Double.MAX_VALUE : AntiLogoutConfig.CONFIG.maxAfkTime()))
 					.executes(ctx -> afkPlayers(ctx.getSource(), Collections.singletonList(ctx.getSource().getPlayerOrThrow()), DoubleArgumentType.getDouble(ctx, "time")))))
-			.executes(ctx -> afkPlayers(ctx.getSource(), Collections.singleton(ctx.getSource().getPlayerOrThrow()), config.afk.maxAfkTime))
+			.executes(ctx -> afkPlayers(ctx.getSource(), Collections.singleton(ctx.getSource().getPlayerOrThrow()), AntiLogoutConfig.CONFIG.maxAfkTime()))
 		);
 	}
 
@@ -90,25 +90,25 @@ public class AfkCommand {
 				long last = afkCooldowns.getOrDefault(player.getUuid(), 0L);
 				if (now - last < AFK_COOLDOWN_MS) {
 					source.sendError(Text.literal("You must wait before using /afk again."));
-					if (config.general.debug) AntiLogout.LOGGER.info("[AFK] {} tried to AFK but is on cooldown.", player.getName().getString());
+					if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[AFK] {} tried to AFK but is on cooldown.", player.getName().getString());
 					continue;
 				}
 				afkCooldowns.put(player.getUuid(), now);
 			}
 			if (rules.al_isFake()) {
 				source.sendError(Text.literal(player.getName().getString() + " is already AFK/disconnected."));
-				if (config.general.debug) AntiLogout.LOGGER.info("[AFK] {} is already AFK/disconnected (by {}).", player.getName().getString(), source.getName());
+				if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[AFK] {} is already AFK/disconnected (by {}).", player.getName().getString(), source.getName());
 				continue;
 			}
 			// Prevent AFK if player is in combat (not allowed to disconnect due to combat)
 			if (!rules.al_allowDisconnect()) {
-				source.sendError(Text.literal(config.afk.afkCombatMessage));
+				source.sendError(Text.literal(AntiLogoutConfig.CONFIG.afkCombatMessage()));
 				AntiLogout.LOGGER.info("[AFK] BLOCKED: {} is in combat, NOT disconnecting!", player.getName().getString());
-				if (config.general.debug) AntiLogout.LOGGER.info("[AFK] {} could NOT be set AFK by {} (combat state: BLOCKED)", player.getName().getString(), source.getName());
+				if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[AFK] {} could NOT be set AFK by {} (combat state: BLOCKED)", player.getName().getString(), source.getName());
 				continue; // SKIP disconnect and broadcast!
 			}
 			// Only runs if not in combat:
-			if (config.general.debug) AntiLogout.LOGGER.info("[AFK] About to disconnect {} (combat state: ALLOWED)", player.getName().getString());
+			if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[AFK] About to disconnect {} (combat state: ALLOWED)", player.getName().getString());
 			if (timeLimit == -1) {
 				rules.al_setAllowDisconnectAt(-1); // Unlimited AFK
 			} else {
@@ -117,9 +117,9 @@ public class AfkCommand {
 			rules.al_setAfkDisconnect(true);
 			player.networkHandler.disconnect(AntiLogout.AFK_MESSAGE);
 			source.sendFeedback(() -> Text.literal("Set " + player.getName().getString() + " AFK for " + (timeLimit == -1 ? "unlimited" : (int) timeLimit) + " seconds."), false);
-			if (config.general.debug) AntiLogout.LOGGER.info("[AFK] {} set {} AFK for {} seconds. (combat state: ALLOWED)", source.getName(), player.getName().getString(), (timeLimit == -1 ? "unlimited" : (int) timeLimit));
+			if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[AFK] {} set {} AFK for {} seconds. (combat state: ALLOWED)", source.getName(), player.getName().getString(), (timeLimit == -1 ? "unlimited" : (int) timeLimit));
 			Objects.requireNonNull(player.getServer()).getPlayerManager().broadcast(
-				Text.literal(config.afk.afkBroadcastMessage.replace("{player}", player.getName().getString())), false);
+				Text.literal(AntiLogoutConfig.CONFIG.afkBroadcastMessage().replace("{player}", player.getName().getString())), false);
 			affected++;
 		}
 		if (affected == 0) {

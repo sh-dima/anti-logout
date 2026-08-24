@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.samo_lego.antilogout.AntiLogout;
+import org.samo_lego.antilogout.config.AntiLogoutConfig;
 import org.samo_lego.antilogout.datatracker.LogoutRules;
 
 /**
@@ -42,7 +42,7 @@ public class EventHandler {
 	public static ActionResult onAttack(PlayerEntity attacker, World _level, Hand _interactionHand,
 			Entity target, @Nullable EntityHitResult _entityHitResult) {
 		if (target instanceof PlayerEntity playerTarget) {
-			long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
+			long allowedDc = System.currentTimeMillis() + Math.round(AntiLogoutConfig.CONFIG.combatTimeout() * 1000L);
 
 			// Mark target
 			if (target instanceof LogoutRules logoutTarget) {
@@ -80,10 +80,10 @@ public class EventHandler {
 	 * @param damageSource the damage source
 	 */
 	public static void onHurt(ServerPlayerEntity target, DamageSource damageSource) {
-		long allowedDc = System.currentTimeMillis() + Math.round(AntiLogout.config.combatLog.combatTimeout * 1000L);
+		long allowedDc = System.currentTimeMillis() + Math.round(AntiLogoutConfig.CONFIG.combatTimeout() * 1000L);
 		if (target != null) {
 			boolean trigger;
-			if (AntiLogout.config.combatLog.playerHurtOnly) {
+			if (AntiLogoutConfig.CONFIG.playerHurtOnly()) {
 				// Only player or player projectile
 				trigger = (damageSource.getAttacker() instanceof PlayerEntity) ||
 						(damageSource.getAttacker() instanceof ProjectileEntity p && p.getOwner() instanceof PlayerEntity);

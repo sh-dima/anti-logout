@@ -1,9 +1,5 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import net.fabricmc.loom.task.RemapJarTask
-
 plugins {
 	alias(libs.plugins.fabric.loom)
-	alias(libs.plugins.shadow)
 }
 
 version = "2.2.0"
@@ -25,18 +21,11 @@ loom {
 	}
 }
 
-val shadowOnly by configurations.creating
-
 dependencies {
 	minecraft(libs.minecraft)
 	mappings("${libs.yarn.get()}:v2")
 	modImplementation(libs.fabric.loader)
 	modImplementation(libs.fabric.api)
-
-	implementation(libs.config.core)
-	implementation(libs.config.toml)
-	shadowOnly(libs.config.core)
-	shadowOnly(libs.config.toml)
 }
 
 java {
@@ -153,27 +142,10 @@ tasks.withType<AbstractArchiveTask>().configureEach {
 
 tasks.named<Jar>("jar") {
 	inputs.property("archivesName", project.base.archivesName)
-}
-
-val shadowJar by tasks.named<ShadowJar>("shadowJar") {
-	configurations = listOf(shadowOnly)
-	enableAutoRelocation = true
-	relocationPrefix = "${project.group}.${project.name}.shadow"
 
 	into("META-INF/") {
 		from("LICENSE.txt")
 		from("NOTICE.txt")
 		from("docs/DISCLAIMER.txt")
-
-		from("assets/text/licenses") {
-			into("licenses")
-		}
-	}
-}
-tasks.named<RemapJarTask>("remapJar") {
-	dependsOn(shadowJar)
-	inputFile.set(shadowJar.archiveFile)
-	doLast {
-		shadowJar.archiveFile.get().asFile.delete()
 	}
 }

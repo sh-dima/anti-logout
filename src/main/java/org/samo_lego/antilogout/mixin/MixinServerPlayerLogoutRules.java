@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import org.samo_lego.antilogout.AntiLogout;
+import org.samo_lego.antilogout.config.AntiLogoutConfig;
 import org.samo_lego.antilogout.datatracker.LogoutRules;
 import org.samo_lego.antilogout.event.EventHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -65,7 +66,7 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 	@Override
 	public boolean al_allowDisconnect() {
 		return this.allowDisconnectTime != -1 && this.allowDisconnectTime <= System.currentTimeMillis()
-				&& !AntiLogout.config.general.disableAllLogouts;
+				&& !AntiLogoutConfig.CONFIG.disableAllLogouts();
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 	 */
 	@Override
 	public void al_setAllowDisconnectAt(long systemTime) {
-		if (AntiLogout.config.general.debug) AntiLogout.LOGGER.info("[COMBAT] Setting allowDisconnectAt for {} to {} ({} seconds from now)", ((ServerPlayerEntity)(Object)this).getName().getString(), systemTime, (systemTime == -1 ? "unlimited" : (systemTime - System.currentTimeMillis())/1000));
+		if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[COMBAT] Setting allowDisconnectAt for {} to {} ({} seconds from now)", ((ServerPlayerEntity)(Object)this).getName().getString(), systemTime, (systemTime == -1 ? "unlimited" : (systemTime - System.currentTimeMillis())/1000));
 		this.allowDisconnectTime = systemTime;
 	}
 
@@ -110,7 +111,7 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 		// If this is an AFK disconnect, do not create a dummy or log combat/AFK disconnect
 		if (!this.al_allowDisconnect() && !this.al_isAfkDisconnect()) {
 			DISCONNECTED_PLAYERS.add((ServerPlayerEntity) (Object) this);
-			if (AntiLogout.config.general.debug) AntiLogout.LOGGER.info("[DISCONNECT] {} disconnected while not allowed (combat/AFK).", ((ServerPlayerEntity)(Object)this).getName().getString());
+			if (AntiLogoutConfig.CONFIG.debug()) AntiLogout.LOGGER.info("[DISCONNECT] {} disconnected while not allowed (combat/AFK).", ((ServerPlayerEntity)(Object)this).getName().getString());
 		}
 		// Always reset AFK flag after any disconnect
 		if (this.al_isAfkDisconnect()) {
@@ -157,7 +158,7 @@ public abstract class MixinServerPlayerLogoutRules implements LogoutRules {
 			this.delayedTask = null;
 		}
 
-		if (!this.al_allowDisconnect() && AntiLogout.config.combatLog.notifyOnCombat) {
+		if (!this.al_allowDisconnect() && AntiLogoutConfig.CONFIG.notifyOnCombat()) {
 			((ServerPlayerEntity) (Object) this).sendMessage(al$getInCombatMessage(al_timeUntilDisconnectAllowed()), true);
 		}
 	}

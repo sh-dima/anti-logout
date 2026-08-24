@@ -7,11 +7,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.samo_lego.antilogout.AntiLogout;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import org.samo_lego.antilogout.config.AntiLogoutConfig;
 
 public interface LogoutRules {
 	/**
@@ -76,7 +76,7 @@ public interface LogoutRules {
 	default void al_setInCombatUntil(long systemTime) {
 		this.al_setAllowDisconnectAt(systemTime);
 
-		if (AntiLogout.config.combatLog.notifyOnCombat) {
+		if (AntiLogoutConfig.CONFIG.notifyOnCombat()) {
 			long duration = (long) Math.ceil((systemTime - System.currentTimeMillis()) / 1000.0D);
 
 			this.al$delay(systemTime,
@@ -100,7 +100,7 @@ public interface LogoutRules {
 	@ApiStatus.Internal
 	default Text al$getInCombatMessage(long duration) {
 		return Text.literal("[AL] ").formatted(Formatting.DARK_RED).append(
-				Text.literal(AntiLogout.config.combatLog.inCombatMessage.replace("{time}", String.valueOf(duration)))
+				Text.literal(AntiLogoutConfig.CONFIG.inCombatMessage().replace("{time}", String.valueOf(duration)))
 						.formatted(Formatting.RED));
 	}
 
@@ -112,7 +112,7 @@ public interface LogoutRules {
 	@ApiStatus.Internal
 	default Text al$getEndCombatMessage(long duration) {
 		return Text.literal("[AL] ").formatted(Formatting.DARK_GREEN).append(
-				Text.translatable(AntiLogout.config.combatLog.combatEndMessage, duration)
+				Text.translatable(AntiLogoutConfig.CONFIG.combatEndMessage(), duration)
 						.formatted(Formatting.GREEN));
 	}
 

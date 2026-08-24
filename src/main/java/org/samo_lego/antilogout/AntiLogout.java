@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.text.Text;
 import org.samo_lego.antilogout.command.AfkCommand;
-import org.samo_lego.antilogout.config.ConfigManager;
+import org.samo_lego.antilogout.config.AntiLogoutConfig;
 import org.samo_lego.antilogout.datatracker.LogoutRules;
 import org.samo_lego.antilogout.event.EventHandler;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ public class AntiLogout implements DedicatedServerModInitializer {
 	public static final String MOD_ID = "antilogout";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static ConfigManager.Config config;
 	public static final Text AFK_MESSAGE;
 
 	/**
@@ -26,9 +25,8 @@ public class AntiLogout implements DedicatedServerModInitializer {
 	 * This static block ensures config is loaded before the mod is initialized.
 	 */
 	static {
-		ConfigManager.load();
-		config = ConfigManager.config;
-		AFK_MESSAGE = Text.translatable(config.afk.afkMessage);
+		AntiLogoutConfig.load();
+		AFK_MESSAGE = Text.translatable(AntiLogoutConfig.CONFIG.afkMessage());
 	}
 
 	/**
